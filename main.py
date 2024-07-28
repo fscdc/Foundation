@@ -10,10 +10,9 @@ warnings.filterwarnings("ignore", category=Warning)
 import scanpy as sc
 import scvi
 from tools.eval_utils import evaluate_embedding
-from tools.tools import load_gene_list, convert_X_to_dense, main_gene_selection, BasicProprecess
+from tools.tools import main_gene_selection, BasicProprecess
 
-from tools.extract_batch import extract_batch
-from tools.extract_batch2 import extract_batch2
+from tools.extract_batch import extract_batch, extract_batch2
 import argparse
 import random
 
@@ -81,13 +80,13 @@ if args.gene_list == 'mt_genes':
     print("We use 1162 MT genes")
 elif args.gene_list == 'all_genes':
     gene_list = adata_raw.var_names
-    print("We use all genes")
+    print("We use all genes (will do hvg process later except scGPT_allgene)")
 else:
     ValueError("Invalid gene list!")
 
 adata_new, to_fill_columns = main_gene_selection(adata_raw, gene_list)
 
-print("The number of not found MT genes (Notice: not precise): ",len(to_fill_columns))
+print("The number of not found MT genes (NOTICE: not precise): ",len(to_fill_columns))
 
 
 if args.gene_list == 'mt_genes':
@@ -165,6 +164,7 @@ elif args.embedding_method == "scGPT":
     )
 
 elif args.embedding_method == "scGPT_allgene":
+    # we use all genes to get the embedding (NO hvg process)
     adata_new.var["gene_name"] = adata_new.var_names
     
     model_dir = Path("/home/temporary/data/fengsicheng/scBackdoor/model/scGPT_human")

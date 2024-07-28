@@ -9,6 +9,8 @@ import scanpy as sc
 import copy
 from joblib import Parallel, delayed
 
+sc.settings.set_figure_params(dpi=300, facecolor='white')
+
 # need to make 'celltype' obs exist in adata
 def print_adata_and_num_classes(data):
     """
@@ -177,8 +179,6 @@ def convert_X_to_dense(adata):
 
     return adata_new
 
-sc.settings.set_figure_params(dpi=300, facecolor='white')
-
 def BasicProprecess(adata,qc_min_genes=200):
     """
     do basic filtering
@@ -228,57 +228,173 @@ def main_gene_selection(adata, gene_list):
     return adata_new, to_fill_columns
 
 
-def analyze_datasets(datasets, genelists,cluster_methods,resolutions,embedding_methods):
-    """
-    遍历数据集、基因列表、嵌入方法和分辨率，进行UMAP绘制和桑基图生成，并保存处理后的数据。
-    
-    Parameters
-    ----------
-    resolutions : list of float
-        要使用的分辨率列表。
-    datasets : list of str
-        要处理的数据集列表。
-    genelists : list of str
-        要使用的基因列表。
-    embedding_methods : list of str
-        要使用的嵌入方法列表。
-    cluster_methods : list of str
-        要使用的聚类方法列表。
-    """
-    # 遍历数据集、基因列表、嵌入方法和分辨率
+def plot_sankey2(data1, data2, cluster_column, save_path):
+    res = pd.DataFrame({
+        f'{cluster_column}_1': data1.obs[cluster_column],
+        f'{cluster_column}_2': data2.obs[cluster_column]
+    })
+    res.columns = ['source', 'target']
 
-    import os
+    sky = Sankey(res, colorMode="global", stripColor='left')
+
+    fig, ax = sky.plot()
+    fig.savefig(save_path)
+    print(f"Sankey diagram saved to {save_path}")
+
+
+import os
+def draw_plot(save_path,datasets,genelists,cluster_methods,resolutions):
+    h5ad_directory = "/home/foundation/program/foundation-new/record/temp-h5ad"
+    sc.settings.figdir = "/home/foundation/program/foundation-new/record/figures/UMAP"
+    sc.settings.plot_prefix = ""
     for cluster_method in cluster_methods:
         for dataset in datasets:
             for genelist in genelists:
-                for embedding_method in embedding_methods:
-                    for resolution in resolutions:
+                for resolution in resolutions:
+                    # scVI -------------------------------
+                    file_name = f"{dataset}-{genelist}-{cluster_method}-{resolution}-scVI.h5ad"
+                    file_path = os.path.join(h5ad_directory, file_name)
 
+                    if not os.path.exists(file_path):
+                        ValueError(f"File not found: {file_path}")
+
+                    model_data = sc.read_h5ad(file_path)
+                    
+                    sc.pp.neighbors(model_data, use_rep="X_scVI")
+                    sc.tl.umap(model_data)
+
+                    # draw two UMAP plots and save (one for cluster and one for cell type)
+                    sc.pl.umap(model_data, color=[cluster_method], title=None, save=f"{dataset}-{genelist}-{cluster_method}-{resolution}-scVI-Cluster.pdf")
+                    sc.pl.umap(model_data, color=['celltype'], title=None, save=f"{dataset}-{genelist}-{cluster_method}-{resolution}-scVI-Celltype.pdf")
+                    
+                    # draw sankey diagram and save
+                    plot_sankey(model_data, cluster_column= cluster_method, celltype_column='celltype', save_path=f"/home/foundation/program/foundation-new/record/figures/sankey/{dataset}-{genelist}-{cluster_method}-{resolution}-scVI.pdf")
+
+
+                    # PCA --------------------------------
+                    file_name = f"{dataset}-{genelist}-{cluster_method}-{resolution}-PCA.h5ad"
+                    file_path = os.path.join(h5ad_directory, file_name)
+
+                    if not os.path.exists(file_path):
+                        ValueError(f"File not found: {file_path}")
+
+                    PCA_data = sc.read_h5ad(file_path)
+
+                    sc.pp.neighbors(PCA_data, use_rep="X_pca")
+                    sc.tl.umap(PCA_data)
+
+                    # draw two UMAP plots and save (one for cluster and one for cell type)
+                    sc.pl.umap(PCA_data, color=[cluster_method], title=None, save=f"{dataset}-{genelist}-{cluster_method}-{resolution}-PCA-Cluster.pdf")
+                    sc.pl.umap(PCA_data, color=['celltype'], title=None, save=f"{dataset}-{genelist}-{cluster_method}-{resolution}-PCA-Celltype.pdf")
+                    
+                    # draw sankey diagram and save
+                    plot_sankey(PCA_data, cluster_column= cluster_method, celltype_column='celltype', save_path=f"/home/foundation/program/foundation-new/record/figures/sankey/{dataset}-{genelist}-{cluster_method}-{resolution}-PCA.pdf")
+
+
+                    # scGPT --------------------------------
+                    file_name = f"{dataset}-{genelist}-{cluster_method}-{resolution}-scGPT.h5ad"
+                    file_path = os.path.join(h5ad_directory, file_name)
+
+                    if not os.path.exists(file_path):
+                        ValueError(f"File not found: {file_path}")
+
+                    scGPT = sc.read_h5ad(file_path)
+
+                    sc.pp.neighbors(scGPT, use_rep="X_scGPT")
+                    sc.tl.umap(scGPT)
+
+                    # draw two UMAP plots and save (one for cluster and one for cell type)
+                    sc.pl.umap(scGPT, color=[cluster_method], title=None, save=f"{dataset}-{genelist}-{cluster_method}-{resolution}-scGPT-Cluster.pdf")
+                    sc.pl.umap(scGPT, color=['celltype'], title=None, save=f"{dataset}-{genelist}-{cluster_method}-{resolution}-scGPT-Celltype.pdf")
+                    
+                    # draw sankey diagram and save
+                    plot_sankey(scGPT, cluster_column= cluster_method, celltype_column='celltype', save_path=f"/home/foundation/program/foundation-new/record/figures/sankey/{dataset}-{genelist}-{cluster_method}-{resolution}-scGPT.pdf")
+
+
+                    # scGPT_allgene --------------------------------
+                    file_name = f"{dataset}-{genelist}-{cluster_method}-{resolution}-scGPT_allgene.h5ad"
+                    file_path = os.path.join(h5ad_directory, file_name)
+
+                    if not os.path.exists(file_path):
+                        ValueError(f"File not found: {file_path}")
+
+                    scGPTallgene = sc.read_h5ad(file_path)
+
+                    sc.pp.neighbors(scGPTallgene, use_rep="X_scGPT")
+                    sc.tl.umap(scGPTallgene)
+
+                    # draw two UMAP plots and save (one for cluster and one for cell type)
+                    sc.pl.umap(scGPTallgene, color=[cluster_method], title=None, save=f"{dataset}-{genelist}-{cluster_method}-{resolution}-scGPT_B-Cluster.pdf")
+                    sc.pl.umap(scGPTallgene, color=['celltype'], title=None, save=f"{dataset}-{genelist}-{cluster_method}-{resolution}-scGPT_B-Celltype.pdf")
+                    
+                    # draw sankey diagram and save
+                    plot_sankey(scGPTallgene, cluster_column= cluster_method, celltype_column='celltype', save_path=f"/home/foundation/program/foundation-new/record/figures/sankey/{dataset}-{genelist}-{cluster_method}-{resolution}-scGPT_B.pdf")
+
+
+                    # sankey (model VS PCA, model VS scGPT, model VS scGPT_allgene)
+                    plot_sankey2(model_data, PCA_data, cluster_column=cluster_method, save_path=os.path.join(save_path, f"modelVSPCA-{dataset}-{genelist}-{cluster_method}-{resolution}.pdf"))
+                    plot_sankey2(model_data, scGPT, cluster_column=cluster_method, save_path=os.path.join(save_path, f"modelVSscGPT-{dataset}-{genelist}-{cluster_method}-{resolution}.pdf"))
+                    plot_sankey2(model_data, scGPTallgene, cluster_column=cluster_method, save_path=os.path.join(save_path, f"modelVSscGPTallgene-{dataset}-{genelist}-{cluster_method}-{resolution}.pdf"))
+
+
+# Function to rank and plot genes
+def rank_and_plot_genes(adata, save_path, dataset, genelist, cluster_method, resolution, embedding_method, embedding_key, method="wilcoxon", n_genes1=20, n_genes2=5):
+
+    # Set the save directory for scanpy plots
+    sc.settings.figdir = save_path
+    sc.settings.plot_prefix = ""
+
+    # Verify if the embedding key exists in adata.obs
+    if embedding_key not in adata.obs.columns:
+        ValueError(f"{embedding_key} does not exist in adata.obs columns. Available keys are: {adata.obs.columns.tolist()}")
+        
+
+    # # Rank genes groups and plot the first set of genes
+    # sc.tl.rank_genes_groups(adata, embedding_key, method=method)           
+    # sc.pl.rank_genes_groups(adata, n_genes=n_genes1, sharey=False, save=f"{dataset}-{genelist}-{cluster_method}-{resolution}-{embedding_method}-rankgenes.pdf")
+
+    # Rank genes groups and plot the second set of genes
+    sc.tl.rank_genes_groups(adata, embedding_key, method=method)
+    sc.pl.rank_genes_groups(adata, n_genes=n_genes2, sharey=False)
+
+    # Extract top genes
+    rank_genes_groups = adata.uns["rank_genes_groups"]
+    names = pd.DataFrame(rank_genes_groups['names'])
+    classes = names.columns
+
+    top_genes = {}
+    for classs in classes:
+        top_genes[classs] = names[classs].values[:n_genes2]
+
+    top_genes_df = pd.DataFrame(top_genes)
+
+    # Pick unique genes
+    unique_top_genes_flat_list = []
+    seen_genes = set()
+
+    for col in top_genes_df.columns:
+        for gene in top_genes_df[col]:
+            if gene not in seen_genes:
+                unique_top_genes_flat_list.append(gene)
+                seen_genes.add(gene)
+
+    # Plot dotplot and stacked violin plot
+    sc.pl.dotplot(adata, unique_top_genes_flat_list, groupby=embedding_key, save=f"{dataset}-{genelist}-{cluster_method}-{resolution}-{embedding_method}-dotplot.pdf")
+    sc.pl.stacked_violin(adata, unique_top_genes_flat_list, groupby=embedding_key, save=f"{dataset}-{genelist}-{cluster_method}-{resolution}-{embedding_method}-violinplot.pdf")
+
+# Function to process all combinations of parameters
+def draw_DEG(save_path, datasets, genelists, cluster_methods, resolutions, embedding_methods):
+    h5ad_directory = "/home/foundation/program/foundation-new/record/temp-h5ad"
+    for dataset in datasets:
+        for genelist in genelists:
+            for embedding_method in embedding_methods:
+                for cluster_method in cluster_methods:
+                    for resolution in resolutions:  
                         file_name = f"{dataset}-{genelist}-{cluster_method}-{resolution}-{embedding_method}.h5ad"
-                        file_path = os.path.join("/home/foundation/program/foundation-new/record/temp-h5ad/", file_name)
+                        file_path = os.path.join(h5ad_directory, file_name)
 
                         if not os.path.exists(file_path):
-                            print(f"File not found: {file_path}")
-                            continue
+                            ValueError(f"File not found: {file_path}")
 
-                        adata = sc.read(file_path)
-                        
-
-                        sc.settings.figdir = "/home/foundation/program/foundation-new/record/figures/umap-celltype-cluster"
-
-                        if embedding_method == "PCA":
-                            use_rep = 'X_pca'
-                        elif embedding_method in {"scGPT", "scGPT_allgene"}:
-                            use_rep = 'X_scGPT'
-                        elif embedding_method == "scVI":
-                            use_rep = 'X_scVI'
-
-                        sc.pp.neighbors(adata, use_rep=use_rep)
-                        sc.tl.umap(adata)
-
-                        # draw two UMAP plots and save (one for cluster and one for cell type)
-                        sc.pl.umap(adata, color=[cluster_method], title=f'{cluster_method} (resolution={resolution})', save=f"_cluster-{dataset}-{genelist}-{cluster_method}-{resolution}-{embedding_method}.pdf")
-                        sc.pl.umap(adata, color=['celltype'], title=f'Cell Type (resolution={resolution})', save=f"_celltype-{dataset}-{genelist}-{cluster_method}-{resolution}-{embedding_method}.pdf")
-                        
-                        # 绘制桑基图并保存
-                        plot_sankey(adata, cluster_column= cluster_method, celltype_column='celltype', save_path=f"/home/foundation/program/foundation/plot/sankey/sankey-{dataset}-{genelist}-{cluster_method}-{resolution}-{embedding_method}.pdf")
+                        adata = sc.read_h5ad(file_path)
+                        rank_and_plot_genes(adata, save_path, dataset, genelist, cluster_method, resolution, embedding_method, embedding_key=cluster_method, method="wilcoxon", n_genes1=20, n_genes2=5)

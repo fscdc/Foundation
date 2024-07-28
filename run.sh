@@ -8,7 +8,7 @@ export CUDA_VISIBLE_DEVICES="1"
 
 echo "CUDA_VISIBLE_DEVICES set to: $CUDA_VISIBLE_DEVICES"
 
-GENE_LISTS=("mt_genes")  
+GENE_LISTS=("mt_genes" "all_genes")  
 EMBEDDING_METHODS=("scVI")  
 
 declare -A DATASET_BATCHES
