@@ -382,21 +382,21 @@ def rank_and_plot_genes(adata, save_path, dataset, genelist, cluster_method, res
     sc.pl.dotplot(adata, unique_top_genes_flat_list, groupby=embedding_key, save=f"{dataset}-{genelist}-{cluster_method}-{resolution}-{embedding_method}-dotplot.pdf")
     sc.pl.stacked_violin(adata, unique_top_genes_flat_list, groupby=embedding_key, save=f"{dataset}-{genelist}-{cluster_method}-{resolution}-{embedding_method}-violinplot.pdf")
 
-    ranked_genes_df = sc.get.rank_genes_groups_df(adata, group=None, pval_cutoff=0.05)
+    ranked_genes_df = sc.get.rank_genes_groups_df(adata, group=None, pval_cutoff=0.01)
 
-    top_genes_df_pvals = (ranked_genes_df
-                    .sort_values(by=["group", "pvals"])
-                    .groupby("group")
-                    .head(15)
-                    .sort_values(by=["group", "pvals"]))
+    # top_genes_df_pvals = (ranked_genes_df
+    #                 .sort_values(by=["group", "pvals"])
+    #                 .groupby("group")
+    #                 .head(15)
+    #                 .sort_values(by=["group", "pvals"]))
 
-    top_genes_df_logfc = (ranked_genes_df
-                .sort_values(by=["group", "logfoldchanges"], ascending=[True, False])
-                .groupby("group")
-                .head(15)
-                .sort_values(by=["group", "logfoldchanges"], ascending=[True, False]))
+    # top_genes_df_logfc = (ranked_genes_df
+    #             .sort_values(by=["group", "logfoldchanges"], ascending=[True, False])
+    #             .groupby("group")
+    #             .head(15)
+    #             .sort_values(by=["group", "logfoldchanges"], ascending=[True, False]))
 
-    return top_genes_df_pvals, top_genes_df_logfc
+    return ranked_genes_df
 
 # Function to process all combinations of parameters
 def draw_DEG(save_path, datasets, genelists, cluster_methods, resolutions, embedding_methods):
@@ -413,7 +413,6 @@ def draw_DEG(save_path, datasets, genelists, cluster_methods, resolutions, embed
                             ValueError(f"File not found: {file_path}")
 
                         adata = sc.read_h5ad(file_path)
-                        top_genes_df_pvals, top_genes_df_logfc = rank_and_plot_genes(adata, save_path, dataset, genelist, cluster_method, resolution, embedding_method, embedding_key=cluster_method, method="wilcoxon", n_genes1=20, n_genes2=5)
+                        ranked_genes_df = rank_and_plot_genes(adata, save_path, dataset, genelist, cluster_method, resolution, embedding_method, embedding_key=cluster_method, method="wilcoxon", n_genes1=20, n_genes2=5)
 
-                        top_genes_df_pvals.to_csv(os.path.join(f"/home/foundation/program/foundation-new/record/pvals/{dataset}-{genelist}-{cluster_method}-{resolution}-{embedding_method}-topgenes-pvals.csv"))
-                        top_genes_df_logfc.to_csv(os.path.join(f"/home/foundation/program/foundation-new/record/logfc/{dataset}-{genelist}-{cluster_method}-{resolution}-{embedding_method}-topgenes-logfc.csv"))
+                        ranked_genes_df.to_csv(os.path.join(f"/home/foundation/program/foundation-new/record/pvals/{dataset}-{genelist}-{cluster_method}-{resolution}-{embedding_method}-DEG.csv"))
