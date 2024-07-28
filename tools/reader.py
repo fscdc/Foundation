@@ -1,6 +1,5 @@
 import os
 
-#TODO
 def extract_lines(file_path, match_str1, match_str2):
     lines = []
     match_count = 0
@@ -29,9 +28,8 @@ def process_files(input_dir, output_file, match_str1, match_str2):
                     out_file.write(f"{lines[1]}\n")
                     out_file.write("\n")  # Add empty line to separate files
 
-
 input_dir = "/home/foundation/program/foundation-new/record/txt/"
-output_file = "summary-888-1.1.txt"
+output_file = "summary.txt"
 match_str1 = "Combination:"
 match_str2 = "ARI:"
 

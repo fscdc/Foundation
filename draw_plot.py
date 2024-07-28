@@ -21,5 +21,5 @@ embedding_methods = [ "scVI"]
 cluster_methods = ["louvain"]
 
 # # Call the function to process all combinations
-draw_DEG("/home/foundation/program/foundation-new/record/figures/DEG", datasets, genelists, cluster_methods, resolutions, embedding_methods)
+# draw_DEG("/home/foundation/program/foundation-new/record/figures/DEG", datasets, genelists, cluster_methods, resolutions, embedding_methods)
 
