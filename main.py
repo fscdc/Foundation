@@ -9,7 +9,7 @@ warnings.filterwarnings("ignore", category=Warning)
 
 import scanpy as sc
 import scvi
-from tools.eval_utils import evaluate_embedding
+from tools.eval import evaluate_embedding
 from tools.tools import main_gene_selection, BasicProprecess
 
 from tools.extract_batch import extract_batch, extract_batch2

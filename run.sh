@@ -8,14 +8,14 @@ export CUDA_VISIBLE_DEVICES="1"
 
 echo "CUDA_VISIBLE_DEVICES set to: $CUDA_VISIBLE_DEVICES"
 
-GENE_LISTS=("mt_genes" "all_genes")  
-EMBEDDING_METHODS=("scVI" "PCA")  
+GENE_LISTS=("mt_genes")  
+EMBEDDING_METHODS=("PCA")  
 
 declare -A DATASET_BATCHES
 DATASET_BATCHES["GSE206785"]="Patient,Tissue,Platform"
-DATASET_BATCHES["GSE206785_tumor"]="Patient,Tissue,Platform"
-DATASET_BATCHES["kidney"]="tissue_general"
-DATASET_BATCHES["pancreas"]="tissue_general"
+# DATASET_BATCHES["GSE206785_tumor"]="Patient,Tissue,Platform"
+# DATASET_BATCHES["kidney"]="tissue_general"
+# DATASET_BATCHES["pancreas"]="tissue_general"
 
 CLUSTER_METHODS=("louvain")  
 RESOLUTIONS=(0.3) 
