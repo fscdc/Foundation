@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # output_dir
-OUTPUT_DIR="/home/foundation/program/foundation-new/record/txt/"
+OUTPUT_DIR="/home/foundation/program/Foundation/record/txt/"
 mkdir -p "${OUTPUT_DIR}"
 
 export CUDA_VISIBLE_DEVICES="1"

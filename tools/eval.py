@@ -244,7 +244,7 @@ def evaluate_embedding(adata, embedding_key=None, cluster_method='leiden', resol
     cluster_metrics(target=true_labels, pred=cluster_labels)
 
     # save adata
-    save_path2 = "/home/foundation/program/foundation-new/record/temp-h5ad/"
+    save_path2 = "/home/foundation/program/Foundation/record/temp-h5ad/"
     file_name = f"result-{args.dataset}-{args.gene_list}-{args.cluster_method}-{args.resolution}-{args.embedding_method}.h5ad"
     save_adata(adata, save_path2, file_name)
 

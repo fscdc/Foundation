@@ -11,7 +11,7 @@ datasets = ["GSE206785","GSE206785_tumor","kidney","pancreas"]
 genelists = ["mt_genes", "all_genes"]
 cluster_methods = ["louvain"]
 
-draw_plot('/home/foundation/program/foundation-new/record/figures/sankey-compare',datasets,genelists,cluster_methods,resolutions)
+draw_plot('/home/foundation/program/Foundation/record/figures/sankey-compare',datasets,genelists,cluster_methods,resolutions)
 
 
 resolutions = [0.5,0.3]
@@ -21,5 +21,5 @@ embedding_methods = [ "scVI"]
 cluster_methods = ["louvain"]
 
 # Call the function to process all combinations
-draw_DEG("/home/foundation/program/foundation-new/record/figures/DEG", datasets, genelists, cluster_methods, resolutions, embedding_methods)
+draw_DEG("/home/foundation/program/Foundation/record/figures/DEG", datasets, genelists, cluster_methods, resolutions, embedding_methods)
 

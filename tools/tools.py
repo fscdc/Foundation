@@ -244,8 +244,8 @@ def plot_sankey2(data1, data2, cluster_column, save_path):
 
 import os
 def draw_plot(save_path,datasets,genelists,cluster_methods,resolutions):
-    h5ad_directory = "/home/foundation/program/foundation-new/record/temp-h5ad"
-    sc.settings.figdir = "/home/foundation/program/foundation-new/record/figures/UMAP"
+    h5ad_directory = "/home/foundation/program/Foundation/record/temp-h5ad"
+    sc.settings.figdir = "/home/foundation/program/Foundation/record/figures/UMAP"
     sc.settings.plot_prefix = ""
     for cluster_method in cluster_methods:
         for dataset in datasets:
@@ -268,7 +268,7 @@ def draw_plot(save_path,datasets,genelists,cluster_methods,resolutions):
                     sc.pl.umap(model_data, color=['celltype'], title=None, save=f"{dataset}-{genelist}-{cluster_method}-{resolution}-scVI-Celltype.pdf")
                     
                     # draw sankey diagram and save
-                    plot_sankey(model_data, cluster_column= cluster_method, celltype_column='celltype', save_path=f"/home/foundation/program/foundation-new/record/figures/sankey/{dataset}-{genelist}-{cluster_method}-{resolution}-scVI.pdf")
+                    plot_sankey(model_data, cluster_column= cluster_method, celltype_column='celltype', save_path=f"/home/foundation/program/Foundation/record/figures/sankey/{dataset}-{genelist}-{cluster_method}-{resolution}-scVI.pdf")
 
 
                     # PCA --------------------------------
@@ -288,7 +288,7 @@ def draw_plot(save_path,datasets,genelists,cluster_methods,resolutions):
                     sc.pl.umap(PCA_data, color=['celltype'], title=None, save=f"{dataset}-{genelist}-{cluster_method}-{resolution}-PCA-Celltype.pdf")
                     
                     # draw sankey diagram and save
-                    plot_sankey(PCA_data, cluster_column= cluster_method, celltype_column='celltype', save_path=f"/home/foundation/program/foundation-new/record/figures/sankey/{dataset}-{genelist}-{cluster_method}-{resolution}-PCA.pdf")
+                    plot_sankey(PCA_data, cluster_column= cluster_method, celltype_column='celltype', save_path=f"/home/foundation/program/Foundation/record/figures/sankey/{dataset}-{genelist}-{cluster_method}-{resolution}-PCA.pdf")
 
 
                     # scGPT --------------------------------
@@ -308,7 +308,7 @@ def draw_plot(save_path,datasets,genelists,cluster_methods,resolutions):
                     sc.pl.umap(scGPT, color=['celltype'], title=None, save=f"{dataset}-{genelist}-{cluster_method}-{resolution}-scGPT-Celltype.pdf")
                     
                     # draw sankey diagram and save
-                    plot_sankey(scGPT, cluster_column= cluster_method, celltype_column='celltype', save_path=f"/home/foundation/program/foundation-new/record/figures/sankey/{dataset}-{genelist}-{cluster_method}-{resolution}-scGPT.pdf")
+                    plot_sankey(scGPT, cluster_column= cluster_method, celltype_column='celltype', save_path=f"/home/foundation/program/Foundation/record/figures/sankey/{dataset}-{genelist}-{cluster_method}-{resolution}-scGPT.pdf")
 
 
                     # scGPT_allgene --------------------------------
@@ -328,7 +328,7 @@ def draw_plot(save_path,datasets,genelists,cluster_methods,resolutions):
                     sc.pl.umap(scGPTallgene, color=['celltype'], title=None, save=f"{dataset}-{genelist}-{cluster_method}-{resolution}-scGPT_B-Celltype.pdf")
                     
                     # draw sankey diagram and save
-                    plot_sankey(scGPTallgene, cluster_column= cluster_method, celltype_column='celltype', save_path=f"/home/foundation/program/foundation-new/record/figures/sankey/{dataset}-{genelist}-{cluster_method}-{resolution}-scGPT_B.pdf")
+                    plot_sankey(scGPTallgene, cluster_column= cluster_method, celltype_column='celltype', save_path=f"/home/foundation/program/Foundation/record/figures/sankey/{dataset}-{genelist}-{cluster_method}-{resolution}-scGPT_B.pdf")
 
 
                     # sankey (model VS PCA, model VS scGPT, model VS scGPT_allgene)
@@ -400,7 +400,7 @@ def rank_and_plot_genes(adata, save_path, dataset, genelist, cluster_method, res
 
 # Function to process all combinations of parameters
 def draw_DEG(save_path, datasets, genelists, cluster_methods, resolutions, embedding_methods):
-    h5ad_directory = "/home/foundation/program/foundation-new/record/temp-h5ad"
+    h5ad_directory = "/home/foundation/program/Foundation/record/temp-h5ad"
     for dataset in datasets:
         for genelist in genelists:
             for embedding_method in embedding_methods:
@@ -415,4 +415,4 @@ def draw_DEG(save_path, datasets, genelists, cluster_methods, resolutions, embed
                         adata = sc.read_h5ad(file_path)
                         ranked_genes_df = rank_and_plot_genes(adata, save_path, dataset, genelist, cluster_method, resolution, embedding_method, embedding_key=cluster_method, method="wilcoxon", n_genes1=20, n_genes2=5)
 
-                        ranked_genes_df.to_csv(os.path.join(f"/home/foundation/program/foundation-new/record/pvals/{dataset}-{genelist}-{cluster_method}-{resolution}-{embedding_method}-DEG.csv"))
+                        ranked_genes_df.to_csv(os.path.join(f"/home/foundation/program/Foundation/record/pvals/{dataset}-{genelist}-{cluster_method}-{resolution}-{embedding_method}-DEG.csv"))
