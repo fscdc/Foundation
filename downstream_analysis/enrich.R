@@ -135,12 +135,20 @@ for (file in txt_files) {
 
     sorted_nes <- nes_results[order(nes_results$NES), ]
 
-    top_n <- 3
-    top_geneSetIDs <- sorted_nes$ID[1:top_n]
+    top_n <- 10
+    top_geneSetIDs <- sorted_nes$ID[1:top_n,]
 
-    gseaplot <- gseaplot2(gseaGO, geneSetID = top_geneSetIDs, pvalue_table = TRUE, title = "Top NES Pathways", ES_geom = "line")
+    gseaplot <- gseaplot2(gseaGO, geneSetID = top_geneSetIDs, pvalue_table = TRUE, title = "Top10 NES Pathways", ES_geom = "line")
+    gseaplot_path <- paste0("/home/foundation/program/Foundation/record/figures/enrich/",dataset, "-", genelist, "-", cluster_method, "-", resolution, "-", embedding_method, "-GSEA-NES.pdf")
+    ggsave(gseaplot_path, plot = gseaplot, width = 30, height = 20)
 
+    sorted_nes <- nes_results[order(nes_results$p.adjust), ]
 
-    gseaplot_path <- paste0("/home/foundation/program/Foundation/record/figures/enrich/",dataset, "-", genelist, "-", cluster_method, "-", resolution, "-", embedding_method, "-GSEA.pdf")
-    ggsave(gseaplot_path, plot = gseaplot, width = 10, height = 6)
+    top_n <- 10
+    top_geneSetIDs <- sorted_nes$ID[1:top_n,]
+
+    gseaplot <- gseaplot2(gseaGO, geneSetID = top_geneSetIDs, pvalue_table = TRUE, title = "Top10 P_adjust Pathways", ES_geom = "line")
+    gseaplot_path <- paste0("/home/foundation/program/Foundation/record/figures/enrich/",dataset, "-", genelist, "-", cluster_method, "-", resolution, "-", embedding_method, "-GSEA-Pval.pdf")
+    ggsave(gseaplot_path, plot = gseaplot, width = 30, height = 20)
+
 }
