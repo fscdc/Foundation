@@ -415,4 +415,4 @@ def draw_DEG(save_path, datasets, genelists, cluster_methods, resolutions, embed
                         adata = sc.read_h5ad(file_path)
                         ranked_genes_df = rank_and_plot_genes(adata, save_path, dataset, genelist, cluster_method, resolution, embedding_method, embedding_key=cluster_method, method="wilcoxon", n_genes1=20, n_genes2=5)
 
-                        ranked_genes_df.to_csv(os.path.join(f"/home/foundation/program/Foundation/record/pvals/{dataset}-{genelist}-{cluster_method}-{resolution}-{embedding_method}-DEG.csv"))
+                        ranked_genes_df.to_csv(os.path.join(f"/home/foundation/program/Foundation/record/DEG/{dataset}-{genelist}-{cluster_method}-{resolution}-{embedding_method}-DEG.txt"), sep="\t", index=False)
