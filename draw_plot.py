@@ -6,18 +6,18 @@ import numpy as np
 random.seed(2024)
 np.random.seed(2024)
 
-resolutions = [0.5,0.3]
-datasets = ["GSE206785","GSE206785_tumor","kidney","pancreas"]
-genelists = ["mt_genes", "all_genes"]
+resolutions = [0.3]
+datasets = ["GSE206785"]
+genelists = ["mt_genes"]
 cluster_methods = ["louvain"]
 
 draw_plot('/home/foundation/program/Foundation/record/figures/sankey-compare',datasets,genelists,cluster_methods,resolutions)
 
 
-resolutions = [0.5,0.3]
-datasets = ["GSE206785","GSE206785_tumor","kidney","pancreas"]
-genelists = ["mt_genes(1162)"]
-embedding_methods = [ "scVI"]
+resolutions = [0.3]
+datasets = ["GSE206785"]
+genelists = ["mt_genes"]
+embedding_methods = ["PCA"]
 cluster_methods = ["louvain"]
 
 # Call the function to process all combinations

@@ -252,7 +252,7 @@ def draw_plot(save_path,datasets,genelists,cluster_methods,resolutions):
             for genelist in genelists:
                 for resolution in resolutions:
                     # scVI -------------------------------
-                    file_name = f"{dataset}-{genelist}-{cluster_method}-{resolution}-scVI.h5ad"
+                    file_name = f"result-{dataset}-{genelist}-{cluster_method}-{resolution}-scVI.h5ad"
                     file_path = os.path.join(h5ad_directory, file_name)
 
                     if not os.path.exists(file_path):
@@ -272,7 +272,7 @@ def draw_plot(save_path,datasets,genelists,cluster_methods,resolutions):
 
 
                     # PCA --------------------------------
-                    file_name = f"{dataset}-{genelist}-{cluster_method}-{resolution}-PCA.h5ad"
+                    file_name = f"result-{dataset}-{genelist}-{cluster_method}-{resolution}-PCA.h5ad"
                     file_path = os.path.join(h5ad_directory, file_name)
 
                     if not os.path.exists(file_path):
@@ -292,7 +292,7 @@ def draw_plot(save_path,datasets,genelists,cluster_methods,resolutions):
 
 
                     # scGPT --------------------------------
-                    file_name = f"{dataset}-{genelist}-{cluster_method}-{resolution}-scGPT.h5ad"
+                    file_name = f"result-{dataset}-{genelist}-{cluster_method}-{resolution}-scGPT.h5ad"
                     file_path = os.path.join(h5ad_directory, file_name)
 
                     if not os.path.exists(file_path):
@@ -312,7 +312,7 @@ def draw_plot(save_path,datasets,genelists,cluster_methods,resolutions):
 
 
                     # scGPT_allgene --------------------------------
-                    file_name = f"{dataset}-{genelist}-{cluster_method}-{resolution}-scGPT_allgene.h5ad"
+                    file_name = f"result-{dataset}-{genelist}-{cluster_method}-{resolution}-scGPT_allgene.h5ad"
                     file_path = os.path.join(h5ad_directory, file_name)
 
                     if not os.path.exists(file_path):
@@ -406,7 +406,7 @@ def draw_DEG(save_path, datasets, genelists, cluster_methods, resolutions, embed
             for embedding_method in embedding_methods:
                 for cluster_method in cluster_methods:
                     for resolution in resolutions:  
-                        file_name = f"{dataset}-{genelist}-{cluster_method}-{resolution}-{embedding_method}.h5ad"
+                        file_name = f"result-{dataset}-{genelist}-{cluster_method}-{resolution}-{embedding_method}.h5ad"
                         file_path = os.path.join(h5ad_directory, file_name)
 
                         if not os.path.exists(file_path):

@@ -4,12 +4,12 @@
 OUTPUT_DIR="/home/foundation/program/Foundation/record/txt/"
 mkdir -p "${OUTPUT_DIR}"
 
-export CUDA_VISIBLE_DEVICES="1"
+export CUDA_VISIBLE_DEVICES="3"
 
 echo "CUDA_VISIBLE_DEVICES set to: $CUDA_VISIBLE_DEVICES"
 
 GENE_LISTS=("mt_genes")  
-EMBEDDING_METHODS=("PCA")  
+EMBEDDING_METHODS=("scGPT" "scGPT_allgene")  
 
 declare -A DATASET_BATCHES
 DATASET_BATCHES["GSE206785"]="Patient,Tissue,Platform"
