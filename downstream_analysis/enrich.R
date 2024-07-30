@@ -22,7 +22,7 @@ for (file in txt_files) {
     matches <- str_match(file_name, pattern)
 
     dataset <- matches[1,2]
-    genelist <- matches[1,3]
+    genelist_name <- matches[1,3]
     cluster_method <- matches[1,4]
     resolution <- matches[1,5]
     embedding_method <- matches[1,6]
@@ -37,9 +37,9 @@ for (file in txt_files) {
 
         cluster_sorted <- cluster %>% arrange(pvals_adj)
         
-        cluster_top15 <- cluster_sorted[1:15, ]
+        cluster_top <- cluster_sorted[1:30, ]
         
-        gene_ensembl <- unique(cluster_top15$names)
+        gene_ensembl <- unique(cluster_top$names)
         
         genelist <- bitr(gene_ensembl, fromType = "SYMBOL", toType = c("ENTREZID", "GENENAME"), OrgDb = hsa)
 
@@ -63,11 +63,11 @@ for (file in txt_files) {
         
 
         dotplot_figure <- dotplot(ego, split = "ONTOLOGY", showCategory = 4)
-        dotplot_path <- paste0("/home/foundation/program/Foundation/record/figures/enrich/",dataset, "-", genelist, "-", cluster_method, "-", resolution, "-", embedding_method, "-GO_dotplot_cluster", i, ".pdf")
+        dotplot_path <- paste0("/home/foundation/program/Foundation/record/figures/enrich/",dataset, "-", genelist_name, "-", cluster_method, "-", resolution, "-", embedding_method, "-GO_dotplot_cluster", i, ".pdf")
         ggsave(dotplot_path, plot = dotplot_figure, width = 8, height = 6)
         
         barplot_figure <- barplot(ego, split = "ONTOLOGY", showCategory = 4)
-        barplot_path <- paste0("/home/foundation/program/Foundation/record/figures/enrich/",dataset, "-", genelist, "-", cluster_method, "-", resolution, "-", embedding_method, "-GO_barplot_cluster", i, ".pdf")
+        barplot_path <- paste0("/home/foundation/program/Foundation/record/figures/enrich/",dataset, "-", genelist_name, "-", cluster_method, "-", resolution, "-", embedding_method, "-GO_barplot_cluster", i, ".pdf")
         ggsave(barplot_path, plot = barplot_figure, width = 8, height = 6)
         
         
@@ -91,12 +91,12 @@ for (file in txt_files) {
         
 
         dotplot_figure <- dotplot(enrich.kegg, split = "Description", showCategory=4)
-        dotplot_path <- paste0("/home/foundation/program/Foundation/record/figures/enrich/",dataset, "-", genelist, "-", cluster_method, "-", resolution, "-", embedding_method, "-KEGG_dotplot_cluster", i, ".pdf")
+        dotplot_path <- paste0("/home/foundation/program/Foundation/record/figures/enrich/",dataset, "-", genelist_name, "-", cluster_method, "-", resolution, "-", embedding_method, "-KEGG_dotplot_cluster", i, ".pdf")
         ggsave(dotplot_path, plot = dotplot_figure, width = 8, height = 6)
         
 
         barplot_figure <- barplot(enrich.kegg, split = "Description", showCategory=4)
-        barplot_path <- paste0("/home/foundation/program/Foundation/record/figures/enrich/",dataset, "-", genelist, "-", cluster_method, "-", resolution, "-", embedding_method, "-KEGG_barplot_cluster", i, ".pdf")
+        barplot_path <- paste0("/home/foundation/program/Foundation/record/figures/enrich/",dataset, "-", genelist_name, "-", cluster_method, "-", resolution, "-", embedding_method, "-KEGG_barplot_cluster", i, ".pdf")
         ggsave(barplot_path, plot = barplot_figure, width = 8, height = 6)
         
     }
@@ -136,7 +136,7 @@ for (file in txt_files) {
     sorted_nes <- nes_results[order(nes_results$NES), ]
 
     top_n <- 10
-    top_geneSetIDs <- sorted_nes$ID[1:top_n,]
+    top_geneSetIDs <- sorted_nes$ID[1:top_n]
 
     gseaplot <- gseaplot2(gseaGO, geneSetID = top_geneSetIDs, pvalue_table = TRUE, title = "Top10 NES Pathways", ES_geom = "line")
     gseaplot_path <- paste0("/home/foundation/program/Foundation/record/figures/enrich/",dataset, "-", genelist, "-", cluster_method, "-", resolution, "-", embedding_method, "-GSEA-NES.pdf")
@@ -145,7 +145,7 @@ for (file in txt_files) {
     sorted_nes <- nes_results[order(nes_results$p.adjust), ]
 
     top_n <- 10
-    top_geneSetIDs <- sorted_nes$ID[1:top_n,]
+    top_geneSetIDs <- sorted_nes$ID[1:top_n]
 
     gseaplot <- gseaplot2(gseaGO, geneSetID = top_geneSetIDs, pvalue_table = TRUE, title = "Top10 P_adjust Pathways", ES_geom = "line")
     gseaplot_path <- paste0("/home/foundation/program/Foundation/record/figures/enrich/",dataset, "-", genelist, "-", cluster_method, "-", resolution, "-", embedding_method, "-GSEA-Pval.pdf")
