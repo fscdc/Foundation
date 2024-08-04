@@ -59,7 +59,7 @@ for (file in h5ad_files) {
           cluster_cols = F,
           cluster_rows = T,
           color = colormap, breaks = breaks)
-  gsva_path <- paste0("/home/foundation/program/Foundation/record/figures/enrich/",dataset, "-", genelist, "-", cluster_method, "-", resolution, "-", embedding_method, "-GSVA-Celltype.pdf")
+  gsva_path <- paste0("/home/foundation/program/Foundation/record/figures/enrich/",dataset, "-", genelist_name, "-", cluster_method, "-", resolution, "-", embedding_method, "-GSVA-Celltype.pdf")
 
   ggsave(gsva_path, plot = gsva_figure, width = 30, height = 20)
 
@@ -73,7 +73,7 @@ for (file in h5ad_files) {
           cluster_cols = F,
           cluster_rows = T,
           color = colormap, breaks = breaks)
-  gsva_path <- paste0("/home/foundation/program/Foundation/record/figures/enrich/",dataset, "-", genelist, "-", cluster_method, "-", resolution, "-", embedding_method, "-GSVA-cluster.pdf")
+  gsva_path <- paste0("/home/foundation/program/Foundation/record/figures/enrich/",dataset, "-", genelist_name, "-", cluster_method, "-", resolution, "-", embedding_method, "-GSVA-cluster.pdf")
 
   ggsave(gsva_path, plot = gsva_figure, width = 30, height = 20)
 
