@@ -31,7 +31,7 @@ for (file in h5ad_files) {
   resolution <- matches[1,5]
   embedding_method <- matches[1,6]
 
-  adata <- readH5AD("/home/foundation/program/Foundation/record/temp-h5ad/result-GSE206785-mt_genes-louvain-0.3-PCA.h5ad")
+  adata <- readH5AD(file)
   X_matrix <- assay(adata, "X")
   celltype <- colData(adata)$celltype
   cluster <- colData(adata)$louvain
