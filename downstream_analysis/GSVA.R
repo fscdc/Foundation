@@ -32,24 +32,47 @@ for (file in h5ad_files) {
 
   adata <- readH5AD("/home/foundation/program/Foundation/record/temp-h5ad/result-GSE206785-mt_genes-louvain-0.3-PCA.h5ad")
   X_matrix <- assay(adata, "X")
+  celltype <- colData(adata)$celltype
+  cluster <- colData(adata)$louvain
 
   gsva_data <- gsva(X_matrix, s.sets, method = "gsva",kcdf="Gaussian",parallel.sz = 50)
 
   colormap <- colorRampPalette(c("#4575B4","white","#D73027"))(100)
   breaks = seq(-1, 1, length.out=100)
-  gsva_data_used <- gsva_data[c(1:5),]
+  gsva_data_used <- gsva_data[c(1:10),]
 
-  gsva_figure <- pheatmap(gsva_data_used, 
+  average_scores_celltype <- apply(gsva_data_used, 1, function(row) {
+    tapply(row, celltype, mean)
+  })
+  average_scores_cluster <- apply(gsva_data_used, 1, function(row) {
+    tapply(row, cluster, mean)
+  })
+
+  gsva_figure <- pheatmap(average_scores_celltype, 
           cellheight = 8, cellwidth = 12,
           border = "white",
           fontsize = 10,
-          main = "cc",
+          main = "Celltype GSVA",
           show_rownames = T,
           scale = "row", # column
           cluster_cols = F,
           cluster_rows = T,
           color = colormap, breaks = breaks)
-  gsva_path <- paste0("/home/foundation/program/Foundation/record/figures/enrich/",dataset, "-", genelist, "-", cluster_method, "-", resolution, "-", embedding_method, "-GSVA-heatmap.pdf")
+  gsva_path <- paste0("/home/foundation/program/Foundation/record/figures/enrich/",dataset, "-", genelist, "-", cluster_method, "-", resolution, "-", embedding_method, "-GSVA-Celltype.pdf")
+
+  ggsave(gsva_path, plot = gsva_figure, width = 30, height = 20)
+
+  gsva_figure <- pheatmap(average_scores_cluster, 
+          cellheight = 8, cellwidth = 12,
+          border = "white",
+          fontsize = 10,
+          main = "Cluster GSVA",
+          show_rownames = T,
+          scale = "row", # column
+          cluster_cols = F,
+          cluster_rows = T,
+          color = colormap, breaks = breaks)
+  gsva_path <- paste0("/home/foundation/program/Foundation/record/figures/enrich/",dataset, "-", genelist, "-", cluster_method, "-", resolution, "-", embedding_method, "-GSVA-cluster.pdf")
 
   ggsave(gsva_path, plot = gsva_figure, width = 30, height = 20)
 
