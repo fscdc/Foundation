@@ -22,7 +22,7 @@ for (file in h5ad_files) {
 
   file_name <- basename(file)
 
-  pattern <- "^result-(.*)-(.*)-(.*)-(.*)-(.*).txt$"
+  pattern <- "^result-(.*)-(.*)-(.*)-(.*)-(.*).h5ad$"
   matches <- str_match(file_name, pattern)
 
   dataset <- matches[1,2]
