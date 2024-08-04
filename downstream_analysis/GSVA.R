@@ -61,7 +61,7 @@ for (file in h5ad_files) {
           color = colormap, breaks = breaks)
   gsva_path <- paste0("/home/foundation/program/Foundation/record/figures/enrich/",dataset, "-", genelist_name, "-", cluster_method, "-", resolution, "-", embedding_method, "-GSVA-Celltype.pdf")
 
-  ggsave(gsva_path, plot = gsva_figure, width = 30, height = 20)
+  ggsave(gsva_path, plot = gsva_figure, width = 7, height = 10)
 
   gsva_figure <- pheatmap(average_scores_cluster, 
           cellheight = 8, cellwidth = 12,
@@ -75,6 +75,6 @@ for (file in h5ad_files) {
           color = colormap, breaks = breaks)
   gsva_path <- paste0("/home/foundation/program/Foundation/record/figures/enrich/",dataset, "-", genelist_name, "-", cluster_method, "-", resolution, "-", embedding_method, "-GSVA-cluster.pdf")
 
-  ggsave(gsva_path, plot = gsva_figure, width = 30, height = 20)
+  ggsave(gsva_path, plot = gsva_figure, width = 7, height = 10)
 
 }
