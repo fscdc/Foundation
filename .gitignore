@@ -1,2 +1,4 @@
 # Ignore all contents of logs but not the folder itself
 record/*
+.RData
+.Rhistory
