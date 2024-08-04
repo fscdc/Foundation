@@ -8,6 +8,7 @@ library(SingleCellExperiment)
 library(pheatmap)
 library(ggplot2)
 library(limma)
+library(stringr)
 
 folder_path <- "/home/foundation/program/Foundation/record/temp-h5ad"
 
